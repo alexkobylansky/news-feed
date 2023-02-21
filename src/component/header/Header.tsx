@@ -181,35 +181,7 @@ export const Header: React.FC<HeaderProps> = () => {
                     </MenuItem>
                   )
                 } else return null
-              })} {/*{
-                if (index < settings.length - 1) {
-                  return (
-                    <MenuItem key={setting.title}
-                              onClick={handleCloseUserMenu}
-                              className={"appbar-menu_item"}
-                    >
-                      <Link to={setting.link}
-                            className={"appbar-menu_link"}>
-                        {setting.title}
-                      </Link>
-                    </MenuItem>
-                  )
-                } else if (index === settings.length - 1) {
-                  return (
-                    <MenuItem key={setting.title}
-                              onClick={handleCloseUserMenu}
-                              className={"appbar-menu_item"}
-                    >
-                      <Button onClick={() => logout(setting.link)}
-                              sx={appbarMenuLink}
-                      >
-                        {setting.title}
-                        <LogoutIcon className={"appbar-menu_logout-icon"}/>
-                      </Button>
-                    </MenuItem>
-                  )
-                }
-              }*/}
+              })}
             </Menu>
           </Box> : <Button color="inherit" onClick={login}>Login</Button>
           }
