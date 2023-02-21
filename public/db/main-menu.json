@@ -1,0 +1,12 @@
+[
+  {
+    "_id": 1,
+    "title": "Home",
+    "link": "/"
+  },
+  {
+    "_id": 2,
+    "title": "News",
+    "link": "news"
+  }
+]
