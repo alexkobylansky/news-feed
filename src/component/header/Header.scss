@@ -2,6 +2,14 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+
+}
+.change-lang-button.active {
+  background-color: rgba(0,0,0, .1);
+
+  &:hover {
+    background-color: rgba(0,0,0, .1);
+  }
 }
 .main-menu_link {
   position: relative;
@@ -9,6 +17,7 @@
   line-height: 1.75;
   letter-spacing: 0.02857em;
   text-transform: uppercase;
+  text-align: center;
   min-width: 90px;
   margin: 6px 8px;
   border-radius: 4px;

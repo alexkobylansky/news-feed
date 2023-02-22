@@ -1,7 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import './Header.scss';
 import {Link, NavLink} from 'react-router-dom';
-import {AppBar, Box, Toolbar, IconButton, Menu, Container, Avatar, Button, Tooltip, MenuItem} from '@mui/material';
+import {useTranslation} from 'react-i18next';
+import {AppBar, Box, Toolbar, IconButton, Menu, Container, Avatar, Button, ButtonGroup, Tooltip, MenuItem} from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import LogoutIcon from '@mui/icons-material/Logout';
 
@@ -13,17 +14,22 @@ interface IPages {
   title: string;
   link: string
 }
+
 interface ISettings {
   title: string;
   link: string
 }
 
 export const Header: React.FC<HeaderProps> = () => {
+  const {t, i18n} = useTranslation();
+
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const [pages, setPages] = useState<IPages[]>([]);
   const [settings, setSettings] = useState<ISettings[]>([]);
   const [isAuth, setIsAuth] = useState(false);
+
+  const [lang, setLang] = useState('uk');
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -66,6 +72,12 @@ export const Header: React.FC<HeaderProps> = () => {
     console.log('logout');
   };
 
+  const handleChangeLang = async (lang: string): Promise<void> => {
+    await i18n.changeLanguage(lang);
+    setLang(lang);
+    localStorage.setItem('I18N_LANGUAGE', lang);
+  }
+
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
@@ -104,25 +116,45 @@ export const Header: React.FC<HeaderProps> = () => {
                   <NavLink to={page.link}
                            className={"main-menu_link"}
                   >
-                    {page.title}
+                    {t(`${page.title}`)}
                   </NavLink>
                 </MenuItem>
               ))}
             </Menu>
+            <ButtonGroup color={"inherit"} variant="text" aria-label="text button group">
+              <Button className={`change-lang-button ${lang === 'uk' ? 'active' : ''}`} onClick={() => handleChangeLang("uk")}>
+                Uk
+              </Button>
+              <Button className={`change-lang-button ${lang === 'en' ? 'active' : ''}`} onClick={() => handleChangeLang("en")}>
+                En
+              </Button>
+            </ButtonGroup>
           </Box>
-          <Box sx={{flexGrow: 1, display: {xs: 'none', md: 'flex'}}}>
-            {!!pages.length && pages.map((page) => (
-              <NavLink to={page.link}
-                       key={page.title}
-                       className={"main-menu_link"}
-                       onClick={handleCloseNavMenu}
-              >
-                {page.title}
-              </NavLink>
-            ))}
+          <Box sx={{flexGrow: 1, justifyContent: "space-between", display: {xs: 'none', md: 'flex'}}}>
+            <Box className={"appbar-menu-navlink-wrapper"}>
+              {!!pages.length && pages.map((page) => (
+                <NavLink to={page.link}
+                         key={page.title}
+                         className={"main-menu_link"}
+                         onClick={handleCloseNavMenu}
+                >
+                  {t(`${page.title}`)}
+                </NavLink>
+              ))}
+            </Box>
+            <Box>
+              <ButtonGroup color={"inherit"} variant="text" aria-label="text button group">
+                <Button className={`change-lang-button ${lang === 'uk' ? 'active' : ''}`} onClick={() => handleChangeLang("uk")}>
+                  Uk
+                </Button>
+                <Button className={`change-lang-button ${lang === 'en' ? 'active' : ''}`} onClick={() => handleChangeLang("en")}>
+                  En
+                </Button>
+              </ButtonGroup>
+            </Box>
           </Box>
-          {isAuth ? <Box sx={{flexGrow: 0}}>
-            <Tooltip title="Open settings">
+          {isAuth ? <Box sx={{flexGrow: 0, minWidth: '100px'}}>
+            <Tooltip title={t('openUserMenu')}>
               <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
                 <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg"/>
               </IconButton>
@@ -167,7 +199,9 @@ export const Header: React.FC<HeaderProps> = () => {
                 </Button>
               </MenuItem>
             </Menu>
-          </Box> : <Button color="inherit" onClick={login}>Login</Button>
+          </Box> : <Box sx={{minWidth: '100px'}}>
+            <Button color="inherit" onClick={login}>{t('login')}</Button>
+          </Box>
           }
         </Toolbar>
       </Container>
