@@ -1,9 +1,15 @@
+.appbar-menu-navlink-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
 .main-menu_link {
   position: relative;
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   line-height: 1.75;
   letter-spacing: 0.02857em;
   text-transform: uppercase;
+  min-width: 90px;
   margin: 6px 8px;
   border-radius: 4px;
   color: inherit;
@@ -53,13 +59,23 @@
     color: inherit;
   }
 
-  & svg.appbar-menu_logout-icon {
-    font-size: 17px;
-    color: #dc1b1b;
-    margin-left: 10px;
+  .appbar-menu_button {
+    justify-content: flex-start;
+    font-weight: 400;
+    font-size: 1rem;
+    padding: 0;
+    text-transform: none;
+    color: inherit;
+
+    &:hover {
+      background-color: transparent;
+    }
+
+    & svg.appbar-menu_logout-icon {
+      font-size: 17px;
+      color: #dc1b1b;
+      margin-left: 10px;
+    }
   }
 
-  .css-1bj4zd8-MuiButtonBase-root-MuiButton-root:hover {
-    background-color: transparent;
-  }
 }

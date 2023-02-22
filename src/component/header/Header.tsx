@@ -40,7 +40,7 @@ export const Header: React.FC<HeaderProps> = () => {
     setAnchorElUser(null);
   };
 
-  const getData = async (link: string, dispatch:  React.Dispatch<React.SetStateAction<IPages[] | ISettings[]>>) => {
+  const getData = async (link: string, dispatch: React.Dispatch<React.SetStateAction<IPages[] | ISettings[]>>) => {
     try {
       const res = await fetch(link);
       if (res.status === 200) {
@@ -53,27 +53,17 @@ export const Header: React.FC<HeaderProps> = () => {
   };
 
   useEffect(() => {
-  getData('/db/main-menu.json', setPages);
-  getData('/db/user-menu.json', setSettings);
+    getData('/db/main-menu.json', setPages);
+    getData('/db/user-menu.json', setSettings);
   }, []);
-
-  const appbarMenuLink = {
-    justifyContent: 'flex-start',
-    fontWeight: '400',
-    fontSize: '1rem',
-    padding: 0,
-    textDecoration: 'none',
-    textTransform: 'none',
-    color: 'inherit'
-  };
 
   const login = async () => {
     setIsAuth(true);
   };
 
-  const logout = async (link: string) => {
+  const logout = async () => {
     setIsAuth(false);
-    console.log(link);
+    console.log('logout');
   };
 
   return (
@@ -153,35 +143,29 @@ export const Header: React.FC<HeaderProps> = () => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {!!settings.length && settings.map((setting, index) => {
-                if (index < settings.length - 1) {
-                  return (
-                    <MenuItem key={setting.title}
-                              onClick={handleCloseUserMenu}
-                              className={"appbar-menu_item"}
-                    >
-                      <Link to={setting.link}
-                            className={"appbar-menu_link"}>
-                        {setting.title}
-                      </Link>
-                    </MenuItem>
-                  )
-                } else if (index === settings.length - 1) {
-                  return (
-                    <MenuItem key={setting.title}
-                              onClick={handleCloseUserMenu}
-                              className={"appbar-menu_item"}
-                    >
-                      <Button onClick={() => logout(setting.link)}
-                              sx={appbarMenuLink}
-                      >
-                        {setting.title}
-                        <LogoutIcon className={"appbar-menu_logout-icon"}/>
-                      </Button>
-                    </MenuItem>
-                  )
-                } else return null
+              {!!settings.length && settings.map((setting) => {
+                return (
+                  <MenuItem key={setting.title}
+                            onClick={handleCloseUserMenu}
+                            className={"appbar-menu_item"}
+                  >
+                    <Link to={setting.link}
+                          className={"appbar-menu_link"}>
+                      {t(`${setting.title}`)}
+                    </Link>
+                  </MenuItem>
+                )
               })}
+              <MenuItem onClick={handleCloseUserMenu}
+                        className={"appbar-menu_item"}
+              >
+                <Button onClick={logout}
+                        className={"appbar-menu_button"}
+                >
+                  {t(`logout`)}
+                  <LogoutIcon className={"appbar-menu_logout-icon"}/>
+                </Button>
+              </MenuItem>
             </Menu>
           </Box> : <Button color="inherit" onClick={login}>Login</Button>
           }
