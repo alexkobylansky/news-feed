@@ -27,7 +27,7 @@ export const Header: React.FC<HeaderProps> = () => {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const [pages, setPages] = useState<IPages[]>([]);
   const [settings, setSettings] = useState<ISettings[]>([]);
-  const [isAuth, setIsAuth] = useState(false);
+  const [lang, setLang] = useState(localStorage.getItem('I18N_LANGUAGE') || "uk");
 
   const [lang, setLang] = useState('uk');
 
