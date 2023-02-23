@@ -1,0 +1,52 @@
+.modal-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: calc(100% - 10px);
+  width: 100%;
+  padding: 4rem 0;
+}
+.close-icon-wrapper {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+
+  & .close-icon {
+    color: dimgray;
+  }
+
+  &:hover {
+    background-color: #dc1b1b;
+    transition: background-color .1s linear;
+    & .close-icon{
+      color: #FFFFFF;
+      transition: color .1s linear;
+    }
+  }
+}
+
+.MuiGrid-root.MuiGrid-container.css-11lq3yg-MuiGrid-root {
+  flex-direction: column;
+}
+
+@media screen and (min-width: 375px) {
+.modal-wrapper {
+  max-width: calc(100% - 20px);
+}
+}
+
+@media screen and (min-width: 520px) {
+  .modal-wrapper {
+    max-width: 500px;
+  }
+  .MuiGrid-root.MuiGrid-container.css-11lq3yg-MuiGrid-root {
+    flex-direction: row;
+  }
+}

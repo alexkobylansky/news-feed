@@ -1,8 +1,23 @@
 import React, {useState, useEffect} from 'react';
 import './Header.scss';
+import {useSelector, useDispatch} from "react-redux";
+import {logout} from "../../store/AuthSlice";
+import {signInFormOpen} from "../../store/SignInModalSlice";
 import {Link, NavLink} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
-import {AppBar, Box, Toolbar, IconButton, Menu, Container, Avatar, Button, ButtonGroup, Tooltip, MenuItem} from '@mui/material';
+import {
+  AppBar,
+  Box,
+  Toolbar,
+  IconButton,
+  Menu,
+  Container,
+  Avatar,
+  Button,
+  ButtonGroup,
+  Tooltip,
+  MenuItem
+} from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import LogoutIcon from '@mui/icons-material/Logout';
 
@@ -29,7 +44,9 @@ export const Header: React.FC<HeaderProps> = () => {
   const [settings, setSettings] = useState<ISettings[]>([]);
   const [lang, setLang] = useState(localStorage.getItem('I18N_LANGUAGE') || "uk");
 
-  const [lang, setLang] = useState('uk');
+  // @ts-ignore
+  const isAuth = useSelector((state) => state.isAuth.isAuth);
+  const dispatch = useDispatch();
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -63,12 +80,13 @@ export const Header: React.FC<HeaderProps> = () => {
     getData('/db/user-menu.json', setSettings);
   }, []);
 
-  const login = async () => {
-    setIsAuth(true);
-  };
+  const handleOpen = () => {
+    dispatch(signInFormOpen({signInFormIsOpen: true}))
+  }
 
-  const logout = async () => {
-    setIsAuth(false);
+  const handleLogout = async () => {
+    dispatch(logout({isAuth: false}));
+
     console.log('logout');
   };
 
@@ -191,7 +209,7 @@ export const Header: React.FC<HeaderProps> = () => {
               <MenuItem onClick={handleCloseUserMenu}
                         className={"appbar-menu_item"}
               >
-                <Button onClick={logout}
+                <Button onClick={handleLogout}
                         className={"appbar-menu_button"}
                 >
                   {t(`logout`)}
@@ -200,7 +218,7 @@ export const Header: React.FC<HeaderProps> = () => {
               </MenuItem>
             </Menu>
           </Box> : <Box sx={{minWidth: '100px'}}>
-            <Button color="inherit" onClick={login}>{t('login')}</Button>
+            <Button color="inherit" onClick={handleOpen}>{t('login')}</Button>
           </Box>
           }
         </Toolbar>
