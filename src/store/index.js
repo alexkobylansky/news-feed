@@ -4,7 +4,7 @@ import signInModalReducer from "./SignInModalSlice";
 
 export default configureStore({
   reducer: {
-    isAuth: authReducer,
+    user: authReducer,
     signInFormState: signInModalReducer
   }
 });

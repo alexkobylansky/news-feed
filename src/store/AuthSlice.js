@@ -3,14 +3,16 @@ import {createSlice} from "@reduxjs/toolkit";
 const authSlice = createSlice({
   name: "auth",
   initialState: {
-    isAuth: false
+    user: JSON.parse(localStorage.getItem('user')) || null
   },
   reducers: {
     login(state, action) {
-      state.isAuth = action.payload.isAuth
+      state.user = action.payload.user;
+      localStorage.setItem('user', JSON.stringify(action.payload.user));
     },
     logout(state, action) {
-      state.isAuth = action.payload.isAuth
+      state.user = action.payload.user;
+      localStorage.removeItem('user');
     }
   }
 });

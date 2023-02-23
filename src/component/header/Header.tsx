@@ -45,7 +45,7 @@ export const Header: React.FC<HeaderProps> = () => {
   const [lang, setLang] = useState(localStorage.getItem('I18N_LANGUAGE') || "uk");
 
   // @ts-ignore
-  const isAuth = useSelector((state) => state.isAuth.isAuth);
+  const user = useSelector(state => state.user.user);
   const dispatch = useDispatch();
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -85,9 +85,7 @@ export const Header: React.FC<HeaderProps> = () => {
   }
 
   const handleLogout = async () => {
-    dispatch(logout({isAuth: false}));
-
-    console.log('logout');
+    dispatch(logout({user: null}));
   };
 
   const handleChangeLang = async (lang: string): Promise<void> => {
@@ -171,10 +169,10 @@ export const Header: React.FC<HeaderProps> = () => {
               </ButtonGroup>
             </Box>
           </Box>
-          {isAuth ? <Box sx={{flexGrow: 0, minWidth: '100px'}}>
+          {!!user ? <Box sx={{flexGrow: 0, minWidth: '100px'}}>
             <Tooltip title={t('openUserMenu')}>
               <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg"/>
+                <Avatar alt={`${user.name} ${user.surname}`} src={`${user.avatar}`}/>
               </IconButton>
             </Tooltip>
             <Menu
