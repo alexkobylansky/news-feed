@@ -94,6 +94,10 @@ export const Header: React.FC<HeaderProps> = () => {
     localStorage.setItem('I18N_LANGUAGE', lang);
   }
 
+  useEffect(() => {
+    document.documentElement.lang = `${lang}`
+  }, [lang]);
+
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
