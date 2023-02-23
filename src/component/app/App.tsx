@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import {Routes, Route} from 'react-router-dom';
+import {RequireAuth} from "../hoc/RequireAuth";
 import {Layout} from "../Layout";
 import {HomePage} from "../../pages/HomePage";
 import {NewsPage} from "../../pages/NewsPage";
@@ -24,7 +25,9 @@ export const App: React.FC = () => {
         <Route path={"/"} element={<Layout/>}>
           <Route index element={<HomePage/>}/>
           <Route path={"news"} element={<NewsPage/>}/>
-          <Route path={"profile"} element={<ProfilePage/>}/>
+          <Route path={"profile"} element={<RequireAuth>
+            <ProfilePage/>
+          </RequireAuth>}/>
         </Route>
       </Routes>
       <BasicModal handleClose={handleSignInFormClose} open={signInFormIsOpen}>

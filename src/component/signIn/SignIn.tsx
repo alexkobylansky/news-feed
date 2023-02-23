@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import {useNavigate} from "react-router-dom";
 import {useDispatch} from "react-redux";
 import {login} from '../../store/AuthSlice';
 import {signInFormClose} from "../../store/SignInModalSlice";
@@ -20,6 +21,8 @@ import {
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
 export const SignIn: React.FC = () => {
+  const navigate = useNavigate();
+
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
@@ -87,6 +90,7 @@ export const SignIn: React.FC = () => {
           setUsername('');
           setPassword('');
           dispatch(signInFormClose({signInFormIsOpen: false}));
+          navigate('/profile', {replace: true});
         } else showAlert("Ім'я користувача або пароль введено неправильно", "warning");
       } else if (response.status >= 400 && response.status <= 500) {
         return new Error("Something went wrong")
