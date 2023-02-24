@@ -21,10 +21,6 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 import LogoutIcon from '@mui/icons-material/Logout';
 
-interface HeaderProps {
-
-}
-
 interface IPages {
   title: string;
   link: string
@@ -35,7 +31,7 @@ interface ISettings {
   link: string
 }
 
-export const Header: React.FC<HeaderProps> = () => {
+export const Header: React.FC = () => {
   const {t, i18n} = useTranslation();
 
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
