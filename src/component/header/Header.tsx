@@ -141,14 +141,7 @@ export const Header: React.FC<HeaderProps> = () => {
                 </MenuItem>
               ))}
             </Menu>
-            <ButtonGroup color={"inherit"} variant="text" aria-label="text button group">
-              <Button className={`change-lang-button ${lang === 'uk' ? 'active' : ''}`} onClick={() => handleChangeLang("uk")}>
-                Uk
-              </Button>
-              <Button className={`change-lang-button ${lang === 'en' ? 'active' : ''}`} onClick={() => handleChangeLang("en")}>
-                En
-              </Button>
-            </ButtonGroup>
+            <LanguageButtons lang={lang} handleChangeLang={handleChangeLang}/>
           </Box>
           <Box sx={{flexGrow: 1, justifyContent: "space-between", display: {xs: 'none', md: 'flex'}}}>
             <Box className={"appbar-menu-navlink-wrapper"}>
@@ -163,14 +156,7 @@ export const Header: React.FC<HeaderProps> = () => {
               ))}
             </Box>
             <Box>
-              <ButtonGroup color={"inherit"} variant="text" aria-label="text button group">
-                <Button className={`change-lang-button ${lang === 'uk' ? 'active' : ''}`} onClick={() => handleChangeLang("uk")}>
-                  Uk
-                </Button>
-                <Button className={`change-lang-button ${lang === 'en' ? 'active' : ''}`} onClick={() => handleChangeLang("en")}>
-                  En
-                </Button>
-              </ButtonGroup>
+              <LanguageButtons lang={lang} handleChangeLang={handleChangeLang}/>
             </Box>
           </Box>
           {!!user ? <Box sx={{flexGrow: 0, minWidth: '100px'}}>
@@ -228,3 +214,21 @@ export const Header: React.FC<HeaderProps> = () => {
     </AppBar>
   );
 }
+
+interface LanguageButtonsProps {
+  lang: string;
+  handleChangeLang(lang: string): Promise<void>;
+}
+
+const LanguageButtons: React.FC<LanguageButtonsProps> = ({lang, handleChangeLang}) => {
+  return (
+    <ButtonGroup color={"inherit"} variant="text" aria-label="text button group">
+      <Button className={`change-lang-button ${lang === 'uk' ? 'active' : ''}`} onClick={() => handleChangeLang("uk")}>
+        Ук
+      </Button>
+      <Button className={`change-lang-button ${lang === 'en' ? 'active' : ''}`} onClick={() => handleChangeLang("en")}>
+        En
+      </Button>
+    </ButtonGroup>
+  )
+};
