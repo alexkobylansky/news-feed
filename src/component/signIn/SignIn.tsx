@@ -3,6 +3,7 @@ import {useNavigate} from "react-router-dom";
 import {useDispatch} from "react-redux";
 import {login} from '../../store/AuthSlice';
 import {signInFormClose} from "../../store/SignInModalSlice";
+import {Notification} from "../Notification";
 import {
   Avatar,
   Button,
@@ -15,8 +16,7 @@ import {
   Box,
   Typography,
   Container,
-  Snackbar,
-  Alert, AlertColor
+  AlertColor
 } from "@mui/material";
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
@@ -33,21 +33,21 @@ export const SignIn: React.FC = () => {
   
   const [isValid, setIsValid] = useState<boolean>(false);
 
-  const [alertOpen, setAlertOpen] = useState<boolean>(false);
-  const [alertMessage, setAlertMessage] = useState<string>('');
+  const [notificationOpen, setNotificationOpen] = useState<boolean>(false);
+  const [notificationMessage, setNotificationMessage] = useState<string>('');
 
-  const [alertSeverity, setAlertSeverity] = useState<AlertColor | undefined>(undefined);
+  const [notificationSeverity, setNotificationSeverity] = useState<AlertColor | undefined>(undefined);
 
   const dispatch = useDispatch();
 
-  const showAlert = (message: string, severity: AlertColor) => {
-    setAlertMessage(message);
-    setAlertSeverity(severity);
-    setAlertOpen(true);
+  const showNotification = (message: string, severity: AlertColor) => {
+    setNotificationMessage(message);
+    setNotificationSeverity(severity);
+    setNotificationOpen(true);
   };
 
-  const handleAlertClose = () => {
-    setAlertOpen(false);
+  const handleNotificationClose = () => {
+    setNotificationOpen(false);
   };
 
   const handleBlurUsername = (value: string) => {
@@ -91,7 +91,7 @@ export const SignIn: React.FC = () => {
           setPassword('');
           dispatch(signInFormClose({signInFormIsOpen: false}));
           navigate('/profile', {replace: true});
-        } else showAlert("Ім'я користувача або пароль введено неправильно", "warning");
+        } else showNotification("Ім'я користувача або пароль введено неправильно", "warning");
       } else if (response.status >= 400 && response.status <= 500) {
         return new Error("Something went wrong")
       }
@@ -179,19 +179,10 @@ export const SignIn: React.FC = () => {
           </Grid>
         </Box>
       </Box>
-      <Snackbar open={alertOpen}
-                autoHideDuration={3000}
-                onClose={handleAlertClose}
-                anchorOrigin={{vertical: 'top', horizontal: 'center'}}
-                sx={{minWidth: '300px'}}
-      >
-        <Alert onClose={handleAlertClose}
-               severity={alertSeverity}
-               sx={{ width: '100%' }}
-        >
-          {alertMessage}
-        </Alert>
-      </Snackbar>
+      <Notification notificationOpen={notificationOpen}
+                    handleNotificationClose={handleNotificationClose}
+                    notificationSeverity={notificationSeverity}
+                    notificationMessage={notificationMessage}/>
     </Container>
   );
 }
