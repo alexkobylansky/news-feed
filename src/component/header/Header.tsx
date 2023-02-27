@@ -150,7 +150,7 @@ export const Header: React.FC = () => {
               <LanguageButtons/>
             </Box>
           </Box>
-          {!!user ? <Box sx={{flexGrow: 0, minWidth: '100px'}}>
+          {!!user ? <Box sx={{display: 'flex', flexGrow: 0, minWidth: '100px', justifyContent: 'center'}}>
             <Tooltip title={t('openUserMenu')}>
               <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
                 <Avatar alt={`${user.name} ${user.surname}`} src={`${user.avatar}`}/>
@@ -196,7 +196,7 @@ export const Header: React.FC = () => {
                 </Button>
               </MenuItem>
             </Menu>
-          </Box> : <Box sx={{minWidth: '100px'}}>
+          </Box> : <Box sx={{display: 'flex', flexGrow: 0, minWidth: '100px', justifyContent: 'center'}}>
             <Button color="inherit" onClick={handleOpen}>{t('login')}</Button>
           </Box>
           }
