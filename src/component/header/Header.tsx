@@ -4,6 +4,7 @@ import {useSelector, useDispatch} from "react-redux";
 import {logout} from "../../store/AuthSlice";
 import {signInFormOpen} from "../../store/SignInModalSlice";
 import {Link, NavLink} from 'react-router-dom';
+import {useLanguage} from "../hook/useLanguage";
 import {useTranslation} from 'react-i18next';
 import {
   AppBar,
@@ -32,13 +33,13 @@ interface ISettings {
 }
 
 export const Header: React.FC = () => {
-  const {t, i18n} = useTranslation();
+  const {lang} = useLanguage();
+  const {t} = useTranslation();
 
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const [pages, setPages] = useState<IPages[]>([]);
   const [settings, setSettings] = useState<ISettings[]>([]);
-  const [lang, setLang] = useState(localStorage.getItem('I18N_LANGUAGE') || "uk");
 
   // @ts-ignore
   const user = useSelector(state => state.user.user);
@@ -83,12 +84,6 @@ export const Header: React.FC = () => {
   const handleLogout = async () => {
     dispatch(logout({user: null}));
   };
-
-  const handleChangeLang = async (lang: string): Promise<void> => {
-    await i18n.changeLanguage(lang);
-    setLang(lang);
-    localStorage.setItem('I18N_LANGUAGE', lang);
-  }
 
   useEffect(() => {
     document.documentElement.lang = `${lang}`
@@ -137,7 +132,7 @@ export const Header: React.FC = () => {
                 </MenuItem>
               ))}
             </Menu>
-            <LanguageButtons lang={lang} handleChangeLang={handleChangeLang}/>
+            <LanguageButtons/>
           </Box>
           <Box sx={{flexGrow: 1, justifyContent: "space-between", display: {xs: 'none', md: 'flex'}}}>
             <Box className={"appbar-menu-navlink-wrapper"}>
@@ -152,7 +147,7 @@ export const Header: React.FC = () => {
               ))}
             </Box>
             <Box>
-              <LanguageButtons lang={lang} handleChangeLang={handleChangeLang}/>
+              <LanguageButtons/>
             </Box>
           </Box>
           {!!user ? <Box sx={{flexGrow: 0, minWidth: '100px'}}>
@@ -211,12 +206,9 @@ export const Header: React.FC = () => {
   );
 }
 
-interface LanguageButtonsProps {
-  lang: string;
-  handleChangeLang(lang: string): Promise<void>;
-}
+const LanguageButtons: React.FC = () => {
+  const {lang, handleChangeLang} = useLanguage();
 
-const LanguageButtons: React.FC<LanguageButtonsProps> = ({lang, handleChangeLang}) => {
   return (
     <ButtonGroup color={"inherit"} variant="text" aria-label="text button group">
       <Button className={`change-lang-button ${lang === 'uk' ? 'active' : ''}`} onClick={() => handleChangeLang("uk")}>
