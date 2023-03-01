@@ -6,3 +6,10 @@ declare interface IUser {
   username: string;
   password: string;
 }
+
+declare interface IPost {
+  userId: number;
+  id: number;
+  title: string;
+  body: string;
+}
