@@ -5,3 +5,10 @@
   padding: 0;
   box-sizing: border-box;
 }
+h1,
+h2 {
+  text-align: center;
+}
+h1 {
+  margin: 30px 0 50px 0 !important;
+}
