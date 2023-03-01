@@ -3,7 +3,7 @@ import {Routes, Route} from 'react-router-dom';
 import {RequireAuth} from "../hoc/RequireAuth";
 import {Layout} from "../Layout";
 import {HomePage} from "../../pages/HomePage";
-import {NewsPage} from "../../pages/NewsPage";
+import {NewsPage} from "../../pages/news-spage/NewsPage";
 import {ProfilePage} from "../../pages/ProfilePage";
 
 import {BasicModal} from "../basic-modal/BasicModal";
