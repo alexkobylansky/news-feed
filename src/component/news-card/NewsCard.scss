@@ -1,0 +1,15 @@
+.content-wrapper {
+  min-height: 225px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.content {
+  -webkit-line-clamp: 4;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.read-more {
+  text-decoration: none;
+}
