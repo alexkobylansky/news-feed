@@ -3,7 +3,15 @@ import './NewsCard.scss'
 import {Button, Card, CardActions, CardContent, Grid, Typography} from "@mui/material";
 import {Link} from "react-router-dom";
 
-export const NewsCard = ({id, userId, title, body}: IPost) => {
+interface NewsCardProps {
+  id: number;
+  title: string;
+  body: string;
+  deletePost?: (id: number) => void;
+  buttonStatus?: boolean;
+}
+
+export const NewsCard: React.FC<NewsCardProps> = ({id, title, body, deletePost, buttonStatus}) => {
 
   return (
     <Grid item key={id} xs={12} sm={6} md={4}>
@@ -20,6 +28,7 @@ export const NewsCard = ({id, userId, title, body}: IPost) => {
           <Link to={`/news/${id}`} className="read-more">
             <Button size="small">Read More</Button>
           </Link>
+          {deletePost && <Button size="small" onClick={() => deletePost(id)} disabled={!buttonStatus}>Delete post</Button>}
         </CardActions>
       </Card>
     </Grid>

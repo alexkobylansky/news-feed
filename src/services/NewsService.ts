@@ -1,28 +1,32 @@
-const url = new URL(`${process.env.REACT_APP_BASE_URL}`);
+import {getAllPosts, getPostById, getDeletePost} from "../apis/api";
 
-export const getAllPosts = async (count: number) => {
-  try {
-    const res = await fetch(`${url}posts?_start=${count}&_limit=12`);
-    if (res.status === 200) {
-      return await res.json();
-    } else if (res.status === 404) {
-      return new Error('Something went wrong')
-    }
-  } catch (e) {
-    console.log(e);
-    return []
-  }
+export const getPosts = async (count: number, limiti: number) => {
+  return await getAllPosts(count, limiti)
 };
 
-export const getPostById = async (id: number) => {
-  try {
-    const res = await fetch(`${url}posts/${id}`);
-    if (res.status === 200) {
-      return await res.json()
-    } else if (res.status === 404) {
-      return new Error('Something went wrong')
+export const getRandomPosts = async (count: number): Promise<IPost[] | undefined> => {
+  const idSet = new Set<number>();
+  const randomId = () => Math.floor(Math.random() * 100);
+  const randomPostsArray: IPost[] = [];
+  for (let i = 0; ; i++) {
+    const id = randomId();
+    // If id !== 0
+    if (id) {
+      idSet.add(id);
+      if (idSet.size === count) {
+        break
+      }
     }
-  } catch (e) {
-    console.log(e);
   }
-}
+  for (const value of idSet) {
+    const post = await getPostById(value);
+    if (post) {
+      randomPostsArray.push(post)
+    }
+  }
+  return randomPostsArray
+};
+
+export const deletePost = async (id: number): Promise<boolean | undefined> => {
+  return await getDeletePost(id);
+};

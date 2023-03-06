@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {NewsCard} from "../../component/news-card/NewsCard";
 import './NewsPage.scss';
-import {getAllPosts} from "../../services/NewsService";
+import {getPosts, deletePost} from "../../services/NewsService";
 import {ButtonWithSpinner} from "../../component/ButtonWithSpinner";
 import {Grid, Typography} from "@mui/material";
 import {Spinner} from "../../component/Spinner";
@@ -13,40 +13,57 @@ export const NewsPage: React.FC = () => {
   const [loadingMore, setLoadingMore] = useState<boolean>(false);
   const [count, setCount] = useState<number>(0);
 
+  const [buttonStatus, setButtonStatus] = useState(true);
+
   const [newsEnded, setNewsEnded] = useState<boolean>(false);
 
-  const getPosts = async (count: number) => {
-   await getAllPosts(count)
-      .then(data => {
-        if (data) {
-          setNews(data);
-          setCount(prevState => prevState + 12);
-        }
-      })
-      .catch(error => console.log(error))
+  const getAllPosts = async (count: number, limit: number) => {
+   try {
+     const news = await getPosts(count, limit);
+     if (news) {
+       setNews(news);
+       setCount(prevState => prevState + 12);
+     }
+   } catch (error) {
+     console.log(error);
+   }
+  };
+
+  const handleDeletePost = async (id: number) => {
+    setButtonStatus(false)
+    const res = await deletePost(id);
+    if (res) {
+      setNews(prevState => prevState.filter(post => post.id !== id));
+    }
+    setButtonStatus(true)
   };
 
   const handleClickLoading = async () => {
-    setLoadingMore(true);
-     await getAllPosts(count)
-      .then(data => {
-        if (data) {
-          setNews(prevState => [...prevState, ...data]);
-          setCount(prevState => prevState + 12);
-        }
-        if (data.length < 12) {
-          setNewsEnded(true)
-        }
-      })
-      .catch(error => console.log(error))
-      .finally(() => setLoadingMore(false))
+    try {
+      setLoadingMore(true);
+      const news = await getPosts(count, 12)
+      if (news) {
+        setNews(prevState => [...prevState, ...news]);
+        setCount(prevState => prevState + 12);
+      }
+      if (news && news.length < 12) {
+        setNewsEnded(true)
+      }
+    } catch(error) {
+      console.log(error)
+    } finally {
+      setLoadingMore(false)
+    }
   };
 
   useEffect(() => {
     if (!firstInit.current) {
-      getPosts(count);
+      getAllPosts(count, 12);
     }
     firstInit.current = true;
+    return () => {
+      setNews([]);
+    }
   }, []);
 
   return (
@@ -54,11 +71,12 @@ export const NewsPage: React.FC = () => {
       <Typography component="h1" variant="h2">News</Typography>
       <Grid container spacing={2} className="news-wrapper">
         {!!news.length ? news.map((item) => <NewsCard
-                                                    key={item.id}
-                                                    title={item.title}
-                                                    id={item.id}
-                                                    body={item.body}
-                                                    userId={item.userId}/>) : <Spinner/>
+          key={item.id}
+          title={item.title}
+          id={item.id}
+          body={item.body}
+          buttonStatus={buttonStatus}
+          deletePost={handleDeletePost}/>) : firstInit ? <Typography component={"h3"} textAlign={"center"} width={"100%"}>There is no posts</Typography> : <Spinner/>
         }
       </Grid>
       <ButtonWithSpinner
