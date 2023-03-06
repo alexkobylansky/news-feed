@@ -59,16 +59,17 @@ export const HomePage: React.FC = () => {
                                                             </Box>)
 
   return (
-    <>
+    <Box className="home-page">
       <Typography component="h1" variant="h2" sx={{textAlign: "center"}}>There is three random news</Typography>
-      <Grid container spacing={2} sx={{justifyContent: 'space-between'}}>
-        {news.length === 3 ? content : skeletons}
-        {/*{skeletons}*/}
-      </Grid>
-      <ButtonWithSpinner
-        fetching={loadingMore}
-        onLoading={getAnotherRandomPosts}
-        title={"Load another random news"}/>
-    </>
+      <Box component="main">
+        <Grid container spacing={2} sx={{justifyContent: 'space-between'}}>
+          {news.length === 3 ? content : skeletons}
+        </Grid>
+        <ButtonWithSpinner
+          fetching={loadingMore}
+          onLoading={getAnotherRandomPosts}
+          title={"Load another random news"}/>
+      </Box>
+    </Box>
   );
 }

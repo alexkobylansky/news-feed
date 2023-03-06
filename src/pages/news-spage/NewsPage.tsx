@@ -3,7 +3,7 @@ import {NewsCard} from "../../component/news-card/NewsCard";
 import './NewsPage.scss';
 import {getPosts, deletePost} from "../../services/NewsService";
 import {ButtonWithSpinner} from "../../component/ButtonWithSpinner";
-import {Grid, Typography} from "@mui/material";
+import {Grid, Typography, Box} from "@mui/material";
 import {Spinner} from "../../component/Spinner";
 
 export const NewsPage: React.FC = () => {
@@ -67,23 +67,25 @@ export const NewsPage: React.FC = () => {
   }, []);
 
   return (
-    <>
+    <Box className="news-page">
       <Typography component="h1" variant="h2">News</Typography>
-      <Grid container spacing={2} className="news-wrapper">
-        {!!news.length ? news.map((item) => <NewsCard
-          key={item.id}
-          title={item.title}
-          id={item.id}
-          body={item.body}
-          buttonStatus={buttonStatus}
-          deletePost={handleDeletePost}/>) : <Spinner/>
-        }
-      </Grid>
-      <ButtonWithSpinner
-        fetching={loadingMore}
-        onLoading={handleClickLoading}
-        ended={newsEnded}
-        title={"load more"}/>
-    </>
+      <Box component="main">
+        <Grid container spacing={2} className="news-wrapper">
+          {!!news.length ? news.map((item) => <NewsCard
+            key={item.id}
+            title={item.title}
+            id={item.id}
+            body={item.body}
+            buttonStatus={buttonStatus}
+            deletePost={handleDeletePost}/>) : <Spinner/>
+          }
+        </Grid>
+        <ButtonWithSpinner
+          fetching={loadingMore}
+          onLoading={handleClickLoading}
+          ended={newsEnded}
+          title={"load more"}/>
+      </Box>
+    </Box>
   );
 };
