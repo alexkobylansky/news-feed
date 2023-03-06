@@ -81,13 +81,13 @@ export const SignIn: React.FC = () => {
     } else setIsValid(false);
   }, [username, usernameErrorText, password, passwordErrorText, rememberMe]);
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault();
     setGetData(true);
     try {
       const response = await fetch('/db/users.json');
       if (response.status === 200) {
-        const users = await response.json();
+        const users: IUser[] = await response.json();
         const user = await users.find((item: IUser) => item.username === username && item.password === password);
         if (user) {
           dispatch(login({user: user}));
@@ -97,7 +97,7 @@ export const SignIn: React.FC = () => {
           navigate('/profile', {replace: true});
         } else showNotification("Ім'я користувача або пароль введено неправильно", "warning");
       } else if (response.status >= 400 && response.status <= 500) {
-        return new Error("Something went wrong")
+        throw new Error("Something went wrong")
       }
     } catch (e) {
       console.log(e);
