@@ -76,7 +76,7 @@ export const NewsPage: React.FC = () => {
           id={item.id}
           body={item.body}
           buttonStatus={buttonStatus}
-          deletePost={handleDeletePost}/>) : firstInit ? <Typography component={"h3"} textAlign={"center"} width={"100%"}>There is no posts</Typography> : <Spinner/>
+          deletePost={handleDeletePost}/>) : <Spinner/>
         }
       </Grid>
       <ButtonWithSpinner
