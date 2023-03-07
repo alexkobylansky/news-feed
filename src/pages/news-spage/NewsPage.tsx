@@ -1,8 +1,11 @@
 import React, {useState, useEffect, useRef} from 'react';
+import {useNotification} from "../../component/hook/useNotification";
 import {NewsCard} from "../../component/news-card/NewsCard";
 import './NewsPage.scss';
-import {getPosts, deletePost} from "../../services/NewsService";
+import {getPosts} from "../../apis/api";
+import {deletePost} from "../../apis/api";
 import {ButtonWithSpinner} from "../../component/ButtonWithSpinner";
+import {Notification} from '../../component/Notification'
 import {Grid, Typography, Box} from "@mui/material";
 import {Spinner} from "../../component/Spinner";
 
@@ -17,6 +20,8 @@ export const NewsPage: React.FC = () => {
 
   const [newsEnded, setNewsEnded] = useState<boolean>(false);
 
+  const {showNotification, notificationMessage, handleNotificationClose, notificationSeverity, notificationOpen} = useNotification();
+
   const getAllPosts = async (count: number, limit: number) => {
    try {
      const news = await getPosts(count, limit);
@@ -24,8 +29,9 @@ export const NewsPage: React.FC = () => {
        setNews(news);
        setCount(prevState => prevState + 12);
      }
-   } catch (error) {
+   } catch (error: any) {
      console.log(error);
+     showNotification(error.message, 'error')
    }
   };
 
@@ -49,8 +55,9 @@ export const NewsPage: React.FC = () => {
       if (news && news.length < 12) {
         setNewsEnded(true)
       }
-    } catch(error) {
+    } catch(error: any) {
       console.log(error)
+      showNotification(error.message, 'error');
     } finally {
       setLoadingMore(false)
     }
@@ -58,7 +65,7 @@ export const NewsPage: React.FC = () => {
 
   useEffect(() => {
     if (!firstInit.current) {
-      getAllPosts(count, 12);
+      void getAllPosts(count, 12);
     }
     firstInit.current = true;
     return () => {
@@ -86,6 +93,10 @@ export const NewsPage: React.FC = () => {
           ended={newsEnded}
           title={"load more"}/>
       </Box>
+      <Notification notificationOpen={notificationOpen}
+                    handleNotificationClose={handleNotificationClose}
+                    notificationSeverity={notificationSeverity}
+                    notificationMessage={notificationMessage}/>
     </Box>
   );
 };

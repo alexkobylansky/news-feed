@@ -60,21 +60,21 @@ export const Header: React.FC = () => {
     setAnchorElUser(null);
   };
 
-  const getData = async (link: string, dispatch: React.Dispatch<React.SetStateAction<IPages[] | ISettings[]>>) => {
+  const getData = async (link: string, dispatch: React.Dispatch<React.SetStateAction<IPages[] | ISettings[]>>): Promise<void> => {
     try {
       const res = await fetch(link);
       if (res.status === 200) {
         const req = await res.json();
         dispatch(req);
-      } else return new Error('Something went wrong')
+      } else throw new Error('Something went wrong')
     } catch (e) {
       console.log(e);
     }
   };
 
   useEffect(() => {
-    getData('/db/main-menu.json', setPages);
-    getData('/db/user-menu.json', setSettings);
+    void getData('/db/main-menu.json', setPages);
+    void getData('/db/user-menu.json', setSettings);
   }, []);
 
   const handleOpen = () => {

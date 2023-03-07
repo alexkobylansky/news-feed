@@ -3,6 +3,8 @@ import {ButtonWithSpinner} from "../component/ButtonWithSpinner";
 import {NewsCard} from "../component/news-card/NewsCard";
 import {getRandomPosts} from "../services/NewsService";
 import {Grid, Typography, Skeleton, Stack, Box} from '@mui/material';
+import {useNotification} from "../component/hook/useNotification";
+import {Notification} from "../component/Notification";
 
 interface IPost {
   userId: number;
@@ -16,6 +18,8 @@ export const HomePage: React.FC = () => {
   const [news, setPosts] = useState<IPost[]>([]);
   const firstInit = useRef(false);
 
+  const {showNotification, handleNotificationClose, notificationOpen, notificationSeverity, notificationMessage} = useNotification();
+
   const skeletonArray = new Array(3).fill('');
 
   const getPosts = async () => {
@@ -26,8 +30,9 @@ export const HomePage: React.FC = () => {
         setPosts(prevState => [...prevState, ...post]);
         setLoadingMore(false);
       }
-    } catch(error) {
+    } catch(error: any) {
       console.log(error)
+      showNotification(error.message, 'error');
     }
   };
 
@@ -70,6 +75,10 @@ export const HomePage: React.FC = () => {
           onLoading={getAnotherRandomPosts}
           title={"Load another random news"}/>
       </Box>
+      <Notification notificationOpen={notificationOpen}
+                    handleNotificationClose={handleNotificationClose}
+                    notificationSeverity={notificationSeverity}
+                    notificationMessage={notificationMessage}/>
     </Box>
   );
 }

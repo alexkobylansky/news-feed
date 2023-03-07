@@ -3,6 +3,8 @@ import {useNavigate} from "react-router-dom";
 import {useDispatch} from "react-redux";
 import {login} from '../../store/AuthSlice';
 import {signInFormClose} from "../../store/SignInModalSlice";
+import {submit} from "../../apis/api";
+import {useNotification} from "../hook/useNotification";
 import {Notification} from "../Notification";
 import {
   Avatar,
@@ -34,24 +36,11 @@ export const SignIn: React.FC = () => {
   
   const [isValid, setIsValid] = useState<boolean>(false);
 
-  const [notificationOpen, setNotificationOpen] = useState<boolean>(false);
-  const [notificationMessage, setNotificationMessage] = useState<string>('');
-
-  const [notificationSeverity, setNotificationSeverity] = useState<AlertColor | undefined>(undefined);
+  const {showNotification, handleNotificationClose, notificationSeverity, notificationMessage, notificationOpen} = useNotification();
 
   const [getData, setGetData] = useState(false);
 
   const dispatch = useDispatch();
-
-  const showNotification = (message: string, severity: AlertColor) => {
-    setNotificationMessage(message);
-    setNotificationSeverity(severity);
-    setNotificationOpen(true);
-  };
-
-  const handleNotificationClose = () => {
-    setNotificationOpen(false);
-  };
 
   const handleBlurUsername = (value: string) => {
     if (!value) {
@@ -82,12 +71,11 @@ export const SignIn: React.FC = () => {
   }, [username, usernameErrorText, password, passwordErrorText, rememberMe]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
-    event.preventDefault();
-    setGetData(true);
     try {
-      const response = await fetch('/db/users.json');
-      if (response.status === 200) {
-        const users: IUser[] = await response.json();
+      event.preventDefault();
+      setGetData(true);
+      const users = await submit();
+      if (users) {
         const user = await users.find((item: IUser) => item.username === username && item.password === password);
         if (user) {
           dispatch(login({user: user}));
@@ -96,13 +84,11 @@ export const SignIn: React.FC = () => {
           dispatch(signInFormClose({signInFormIsOpen: false}));
           navigate('/profile', {replace: true});
         } else showNotification("Ім'я користувача або пароль введено неправильно", "warning");
-      } else if (response.status >= 400 && response.status <= 500) {
-        throw new Error("Something went wrong")
       }
-    } catch (e) {
-      console.log(e);
-    } finally {
       setGetData(false);
+    } catch (error: any) {
+      console.log(error);
+      showNotification(error.message, 'error');
     }
   };
 
