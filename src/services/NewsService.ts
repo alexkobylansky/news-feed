@@ -1,8 +1,4 @@
-import {getAllPosts, getPostById, getDeletePost} from "../apis/api";
-
-export const getPosts = async (count: number, limiti: number) => {
-  return await getAllPosts(count, limiti)
-};
+import {getPostById} from "../apis/api";
 
 export const getRandomPosts = async (count: number): Promise<IPost[] | undefined> => {
   const idSet = new Set<number>();
@@ -25,8 +21,4 @@ export const getRandomPosts = async (count: number): Promise<IPost[] | undefined
     }
   }
   return randomPostsArray
-};
-
-export const deletePost = async (id: number): Promise<boolean | undefined> => {
-  return await getDeletePost(id);
 };
